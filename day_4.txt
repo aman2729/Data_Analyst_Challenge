@@ -1,0 +1,28 @@
+Q1) Given Table employees,write a query to display employee name along with manager names
+
+Table Schema:
+
+Emp_Id,Emp_Name,Manger_Id
+
+CREATE TABLE employees (
+    Emp_ID INT PRIMARY KEY,
+    Emp_Name VARCHAR(50),
+    Manager_ID INT
+);
+
+
+INSERT INTO employees (Emp_ID, Emp_Name, Manager_ID) VALUES
+(1, 'John', 3),
+(2, 'Philip', 3),
+(3, 'Keith', 7),
+(4, 'Quinton', 6),
+(5, 'Steve', 7),
+(6, 'Harry', 5),
+(7, 'Gill', 8),
+(8, 'Rock', NULL);
+
+select E1.Emp_ID,E1.Emp_Name,E1.Manager_ID,E2.Emp_Name as Manager_name
+from Employees as E1
+JOIN 
+Employees as E2
+ON E1.Manager_ID=E2.Emp_ID
