@@ -1,0 +1,45 @@
+Q1)You have Given sales table with Column store_name,sale_date,sales_amount
+   Write a SQL Query to get each store running total by month and their month growth ratio
+   Growth Ratio=current_month_sale-last_month_sale/last_month_sale*100
+
+
+CREATE TABLE sales (
+    store_name VARCHAR(50),
+    sale_date DATE,
+    sales_amount DECIMAL(10, 2)
+);
+
+
+INSERT INTO sales (store_name, sale_date, sales_amount) 
+VALUES
+('A', '2024-01-01', 1000.00),
+('A', '2024-02-01', 1500.00),
+('A', '2024-03-01', 2000.00),
+('A', '2024-04-01', 3000.00),
+('A', '2024-05-01', 4500.00),
+('A', '2024-06-01', 6000.00),
+('B', '2024-01-01', 2000.00),
+('B', '2024-02-01', 2200.00),
+('B', '2024-03-01', 2400.00),
+('B', '2024-04-01', 2600.00),
+('B', '2024-05-01', 2800.00),
+('B', '2024-06-01', 3000.00),
+('C', '2024-01-01', 3000.00),
+('C', '2024-02-01', 3100.00),
+('C', '2024-03-01', 3200.00),
+('C', '2024-04-01', 3300.00),
+('C', '2024-05-01', 3400.00),
+('C', '2024-06-01', 3500.00);
+
+
+with cum_sales as
+ (
+   select *,
+   SUM(sales_amount) OVER(PARTITION BY store_name ORDER BY sale_date) as Running_total,
+   LAG(sales_amount) OVER(PARTITION BY store_name ORDER BY sale_date) as previous_sales
+   from Sales
+   )
+   
+select store_name,sale_date,sales_amount,previous_sales,Running_total,
+(sales_amount-previous_sales)/previous_sales*100 as Growth_ratio
+from cum_sales;
